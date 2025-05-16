@@ -1,6 +1,6 @@
 import createHttpError from "http-errors";
 import { randomBytes } from 'crypto';
-import { UsersCollection } from "../db/models/user.js";
+import User from "../db/models/user.js";
 import bcrypt from "bcrypt";
 import { SessionsCollection } from "../db/models/session.js";
 import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
@@ -23,7 +23,7 @@ const createSession = () => {
 export const findSession = query => SessionsCollection.findOne(query);
 
 export const registerUser = async ({ name, email, password }) => {
-    const existingUser = await UsersCollection.findOne({email});
+    const existingUser = await User.findOne({email});
 
     if (existingUser) {
       throw createHttpError(409, "Email in use");
@@ -31,7 +31,7 @@ export const registerUser = async ({ name, email, password }) => {
 
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-    const newUser = await UsersCollection.create({
+    const newUser = await User.create({
       name,
       email,
       password: hashedPassword,
@@ -42,7 +42,7 @@ export const registerUser = async ({ name, email, password }) => {
 
   export const loginUser = async payload => {
     const {email,password} = payload;
-    const user = await UsersCollection.findOne({email});
+    const user = await User.findOne({email});
 
     if (!user) {
       throw createHttpError(401, "Email or password invalid");

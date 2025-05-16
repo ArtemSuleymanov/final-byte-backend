@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { getEnvVar } from "../utils/getEnvVar.js";
 import createHttpError from "http-errors";
-import { UsersCollection } from "../db/models/user.js";
+import User from "../db/models/user.js";
 
 const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
@@ -77,7 +77,7 @@ export const registerUserController = async (req, res) => {
       throw createHttpError(401, "Token is expired or invalid.");
     }
 
-    const user = await UsersCollection.findOne({email: payload.email});
+    const user = await User.findOne({email: payload.email});
 
     if (!user) {
       throw createHttpError(404, "User not found!");
