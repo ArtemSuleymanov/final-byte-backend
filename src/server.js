@@ -26,7 +26,7 @@ export const setupServer = () => {
   );
 
   app.use("/auth", authRouter);
-  app.use("/api", TransactionRouter);
+  app.use("/transactions", TransactionRouter);
 
   app.use("/api-docs", swaggerDocs());
  
