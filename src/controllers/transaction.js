@@ -1,4 +1,5 @@
-import {getAllTransactions} from '../services/transaction.js';
+import createHttpError from 'http-errors';
+import {getAllTransactions, createTransaction, updateTransaction} from '../services/transaction.js';
 
 export const getTransactions = async (req, res, next) => {
   try {
@@ -9,21 +10,29 @@ export const getTransactions = async (req, res, next) => {
   }
 };
 
-export async function create(req, res) {
-  try {
+export const createTransactionController = async (req, res) => {
     const transaction = await createTransaction(req.body);
-    res.status(201).json(transaction);
-  } catch (err) {
-    res.status(500).json({ error: 'Error creating transaction' });
-  }
+
+     res.status(201).json({
+    status: 201,
+    message: 'Successfully created a transaction',
+    data: transaction
+  });
+  
 };
 
-export async function update(req, res) {
-  try {
-    const transaction = await updateTransaction(req.params.id, req.body);
-    if (!transaction) return res.status(404).json({ error: 'Not found' });
-    res.json(transaction);
-  } catch (err) {
-    res.status(500).json({ error: 'Error updating transaction' });
+export const updateTransactionController = async (req, res) => {
+  const { transactionId } = req.params;
+  const resultat = await updateTransaction(transactionId, req.body);
+
+  if(!resultat) {
+    throw createHttpError(404, 'Transaction not found');
   }
+
+  res.json({
+    status: 200,
+    message: 'Successfully patched a transaction',
+    data: resultat.transaction
+  });
+   
 };

@@ -4,11 +4,28 @@ export const getAllTransactions = async () => {
   return await Transaction.find();
 };
      
-export async function createTransaction(data) {
-  const transaction = new Transaction(data);
-  return await transaction.save();
-}
+export const createTransaction = async (payload) => {
+  const transaction = await Transaction.create(payload);
+  return transaction;
+};
 
-export async function updateTransaction(id, data) {
-  return await Transaction.findByIdAndUpdate(id, data, { new: true });
-}
+export const updateTransaction = async (transactionId, payload, options = {}) => {
+  const rawResult = await Transaction.findOneAndUpdate(
+    { _id: transactionId },
+    payload,
+    {
+      new: true,
+      includeResultMetadata: true,
+      ...options,
+    },
+  );
+
+  if(!rawResult || !rawResult.value){
+    return null;
+  };
+
+  return {
+    transaction: rawResult.value,
+    isNew: Boolean(rawResult?.lastErrorObject?.upserted),
+  };
+};
