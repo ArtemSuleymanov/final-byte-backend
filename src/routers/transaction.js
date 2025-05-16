@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import {getTransactions} from '../controllers/transaction.js';
+import { getTransactionsController} from '../controllers/transaction.js';
+import ctrlWrapper from '../middlewares/ctrlWrapper.js';
 
 const TransactionRouter = Router();
 
-TransactionRouter.get('/', getTransactions);
+TransactionRouter.get('/', ctrlWrapper(getTransactionsController));
 
 export default TransactionRouter;
 
-TransactionRouter.delete("/delete", );
