@@ -6,3 +6,5 @@ const TransactionRouter = Router();
 TransactionRouter.get('/', getTransactions);
 
 export default TransactionRouter;
+
+TransactionRouter.delete("/delete", );
