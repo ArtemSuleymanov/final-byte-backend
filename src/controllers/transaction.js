@@ -13,7 +13,7 @@ export const getTransactions = async (req, res, next) => {
 export const createTransactionController = async (req, res) => {
     const transaction = await createTransaction(req.body);
 
-     res.status(201).json({
+    res.status(201).json({
     status: 201,
     message: 'Successfully created a transaction',
     data: transaction
@@ -32,7 +32,7 @@ export const updateTransactionController = async (req, res) => {
   res.json({
     status: 200,
     message: 'Successfully patched a transaction',
-    data: resultat.transaction
+    data: resultat.transaction,
   });
    
 };

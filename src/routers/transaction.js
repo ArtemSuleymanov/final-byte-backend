@@ -13,5 +13,4 @@ TransactionRouter.post('/', validateBody(transactionAddSchema), createTransactio
 TransactionRouter.patch('/:transactionId', isValidId, validateBody(transactionUpdateSchema), updateTransactionController);
 
 
-
 export default TransactionRouter;
