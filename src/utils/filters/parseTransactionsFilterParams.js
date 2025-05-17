@@ -1,29 +1,27 @@
 import { categoriesList, typeList } from '../../constants/transactions.js';
 
-const parseNumber = (value) => {
-  if (typeof value !== 'string') return;
-  const parseNumber = parseInt(value);
-  if (Number.isNaN(parseNumber)) return;
-  return parseNumber;
-};
-
 export const parseTransactionsFilterParams = ({
-  minTrabsactionDate,
-  maxTrabsactionDate,
+  minTransactionDate,
+  maxTransactionDate,
   type,
   category,
 }) => {
-  const parseMinTrabsactionDate = parseNumber(minTrabsactionDate);
-  const parseMaxTrabsactionDate = parseNumber(maxTrabsactionDate);
+  const parsedMinTransactionDate = minTransactionDate ? new Date(minTransactionDate) : undefined;
+  let parsedMaxTransactionDate = maxTransactionDate ? new Date(maxTransactionDate) : undefined;
+
+  if (parsedMaxTransactionDate) {
+   
+    const year = parsedMaxTransactionDate.getFullYear();
+    const month = parsedMaxTransactionDate.getMonth();
+    parsedMaxTransactionDate = new Date(year, month + 1, 0, 23, 59, 59, 999);
+  }
 
   const parsedType = typeList.includes(type) ? type : undefined;
-  const parsedCategory = categoriesList.includes(category)
-    ? category
-    : undefined;
+  const parsedCategory = categoriesList.includes(category) ? category : undefined;
 
   return {
-    parseMinTrabsactionDate,
-    parseMaxTrabsactionDate,
+    minTransactionDate: parsedMinTransactionDate,
+    maxTransactionDate: parsedMaxTransactionDate,
     type: parsedType,
     category: parsedCategory,
   };

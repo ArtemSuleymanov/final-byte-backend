@@ -7,29 +7,34 @@ export const getAllTransactions = async ({
   perPage = 10,
   sortBy = '_id',
   sortOrder = sortList[0],
-  filters ={}
+  filters = {}
 }) => {
   const skip = (page - 1) * perPage;
   const transactionsQuery = Transaction.find();
- if(filters.type) {
-  transactionsQuery.where("type").equals(filters.type);
- }
- if(filters.category) {
-  transactionsQuery.where("category").equals(filters.category);
- }
- if(filters.minTrabsactionDate){
-  transactionsQuery.where("date").gte(filters.minTrabsactionDate);
- }
-if(filters.maxTrabsactionDate){
-  transactionsQuery.where("date").lte(filters.maxTrabsactionDate);
- }
 
-  const data = await transactionsQuery.find()
+  if (filters.type) {
+    transactionsQuery.where("type").equals(filters.type);
+  }
+  if (filters.category) {
+    transactionsQuery.where("category").equals(filters.category);
+  }
+  if (filters.minTransactionDate) {
+    transactionsQuery.where("date").gte(filters.minTransactionDate);
+  }
+  if (filters.maxTransactionDate) {
+    const endOfDay = new Date(filters.maxTransactionDate);
+    endOfDay.setHours(24, 0, 0, 0);
+    transactionsQuery.where("date").lte(endOfDay);
+  }
+
+  const data = await transactionsQuery
     .skip(skip)
     .limit(perPage)
     .sort({ [sortBy]: sortOrder });
-  const totalItems = await Transaction.find().merge(transactionsQuery).countDocuments();
+
+const totalItems = await transactionsQuery.clone().countDocuments();
   const paginationData = calculatePaginationData({ page, perPage, totalItems });
+
   return {
     data,
     totalItems,

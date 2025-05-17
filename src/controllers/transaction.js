@@ -16,8 +16,9 @@ export const getTransactionsController = async (req, res, next) => {
     const paginationParams = parsePaginationParams(req.query);
     const sortParams = parseSortParams(req.query, transactionsSortFields);
     
-    const filters = parseTransactionsFilterParams(req.query);
-const transactions = await getAllTransactions({ ...paginationParams, ...sortParams, filters });
+    let filters = parseTransactionsFilterParams(req.query);
+
+    const transactions = await getAllTransactions({ ...paginationParams, ...sortParams, filters });
 
     res.json({
       status: 200,
