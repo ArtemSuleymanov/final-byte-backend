@@ -1,107 +1,113 @@
-import { registerUser, loginUser, refreshUser, logoutUser, requestResetToken } from "../services/auth.js";
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import { getEnvVar } from "../utils/getEnvVar.js";
-import createHttpError from "http-errors";
+import {
+  registerUser,
+  loginUser,
+  refreshUser,
+  logoutUser,
+  requestResetToken,
+} from "../services/auth.js";
+// import jwt from 'jsonwebtoken';
+// import bcrypt from 'bcrypt';
+// import { getEnvVar } from "../utils/getEnvVar.js";
+// import createHttpError from "http-errors";
 import { UsersCollection } from "../db/models/user.js";
 
-const setupSession = (res, session) => {
-  res.cookie('refreshToken', session.refreshToken, {
-    httpOnly: true,
-    expires: session.refreshTokenValidUntil,
-  });
-  res.cookie('sessionId', session._id, {
-    httpOnly: true,
-    expires: session.refreshTokenValidUntil,
+// const setupSession = (res, session) => {
+//   res.cookie('refreshToken', session.refreshToken, {
+//     httpOnly: true,
+//     expires: session.refreshTokenValidUntil,
+//   });
+//   res.cookie('sessionId', session._id, {
+//     httpOnly: true,
+//     expires: session.refreshTokenValidUntil,
+//   });
+// };
+
+export const registerUserController = async (req, res) => {
+  const user = await registerUser(req.body);
+
+  const { _id, name, email, createdAt, updatedAt } = user;
+
+  res.status(201).json({
+    status: 201,
+    message: "Successfully registered a user!",
+    data: { _id, name, email, createdAt, updatedAt },
   });
 };
 
-export const registerUserController = async (req, res) => {
-    const user = await registerUser(req.body);
+//   export const loginController = async(req,res) => {
+//     const session = await loginUser(req.body);
 
-    const { _id, name, email, createdAt, updatedAt } = user;
-  
-    res.status(201).json({
-      status: 201,
-      message: 'Successfully registered a user!',
-      data: { _id, name, email, createdAt, updatedAt },
-    });
-  };
+//     setupSession(res, session);
 
-  export const loginController = async(req,res) => {
-    const session = await loginUser(req.body);
+//     res.json({
+//       status: 200,
+//       message: 'Successfully logged in an user!',
+//       data: {
+//         accessToken: session.accessToken,
+//       },
+//     });
+//   };
 
-    setupSession(res, session);
-  
-    res.json({
-      status: 200,
-      message: 'Successfully logged in an user!',
-      data: {
-        accessToken: session.accessToken,
-      },
-    });
-  };
+//   export const refreshController = async(req,res) =>{
+//     const session = await refreshUser(req.cookies);
 
-  export const refreshController = async(req,res) =>{
-    const session = await refreshUser(req.cookies);
+//     setupSession(res, session);
 
-    setupSession(res, session);
-  
-    res.json({
-      status: 200,
-      message: "Successfully refreshed a session!",
-      data: {
-        accessToken: session.accessToken,
-      },
-    });
-  };
+//     res.json({
+//       status: 200,
+//       message: "Successfully refreshed a session!",
+//       data: {
+//         accessToken: session.accessToken,
+//       },
+//     });
+//   };
 
-  export const logoutController = async(req,res) => {
-    if (req.cookies.sessionId) {
-      await logoutUser(req.cookies.sessionId);
-    }
-  
-    res.clearCookie('sessionId');
-    res.clearCookie('refreshToken');
-  
-    res.status(204).send();
-  };
+//   export const logoutController = async(req,res) => {
+//     if (req.cookies.sessionId) {
+//       await logoutUser(req.cookies.sessionId);
+//     }
 
-  export const requestResetEmailController = async (req,res) =>{
-    await requestResetToken(req.body.email);
+//     res.clearCookie('sessionId');
+//     res.clearCookie('refreshToken');
 
-    res.json({
-      status: 200,
-      message: "Reset password email has been successfully sent.",
-      data: {}
-  });
-  };
+//     res.status(204).send();
+//   };
 
-  export const resetPwd = async(req,res) =>{
-    const {token, password} = req.body;
+//   export const requestResetEmailController = async (req,res) =>{
+//     await requestResetToken(req.body.email);
 
-    let payload;
-    try {
-      payload = jwt.verify(token, getEnvVar('JWT_SECRET'));
-    } catch{
-      throw createHttpError(401, "Token is expired or invalid.");
-    }
+//     res.json({
+//       status: 200,
+//       message: "Reset password email has been successfully sent.",
+//       data: {}
+//   });
+//   };
 
-    const user = await UsersCollection.findOne({email: payload.email});
+//   export const resetPwd = async(req,res) =>{
+//     const {token, password} = req.body;
 
-    if (!user) {
-      throw createHttpError(404, "User not found!");
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
+//     let payload;
+//     try {
+//       payload = jwt.verify(token, getEnvVar('JWT_SECRET'));
+//     } catch{
+//       throw createHttpError(401, "Token is expired or invalid.");
+//     }
 
-    user.password = hashedPassword;
-    user.sessionToken = null;
-    await user.save();
+//     const user = await UsersCollection.findOne({email: payload.email});
 
-    res.status(200).json(   {
-      status: 200,
-      message: "Password has been successfully reset.",
-      data: {}
-  }
-);
-  };
+//     if (!user) {
+//       throw createHttpError(404, "User not found!");
+//     }
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     user.password = hashedPassword;
+//     user.sessionToken = null;
+//     await user.save();
+
+//     res.status(200).json(   {
+//       status: 200,
+//       message: "Password has been successfully reset.",
+//       data: {}
+//   }
+// );
+//   };
