@@ -8,7 +8,7 @@ const TransactionRouter = Router();
 TransactionRouter.get('/', ctrlWrapper(getTransactionsController));
 
 
-TransactionRouter.delete('/:transactionId',isValidId, ctrlWrapper(deleteTransactionController));
+TransactionRouter.delete('/:transactionId',isValidId("transactionId"), ctrlWrapper(deleteTransactionController));
 
 export default TransactionRouter;
 
