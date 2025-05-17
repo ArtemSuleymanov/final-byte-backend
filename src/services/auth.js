@@ -1,8 +1,3 @@
-// import jwt from "jsonwebtoken";
-// import path from 'node:path';
-// import fs from 'node:fs/promises';
-// import handlebars from 'handlebars';
-// import { getEnvVar } from "../utils/getEnvVar.js";
 import createHttpError from 'http-errors';
 import { randomBytes } from 'crypto';
 import User from '../db/models/user.js';
