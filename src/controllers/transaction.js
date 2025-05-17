@@ -2,12 +2,8 @@ import createHttpError from 'http-errors';
 import {getAllTransactions, createTransaction, updateTransaction} from '../services/transaction.js';
 
 export const getTransactions = async (req, res, next) => {
-  try {
     const transactions = await getAllTransactions();
     res.json(transactions);
-  } catch (error) {
-    next(error);
-  }
 };
 
 export const createTransactionController = async (req, res) => {

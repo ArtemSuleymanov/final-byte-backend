@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { isValidId } from "../middlewares/isValidId.js";
-// import { ctrlWrapper } from "../middlewares/ctrlWrapper.js";
 import { validateBody } from "../utils/validateBody.js";
 
 import {getTransactions, createTransactionController, updateTransactionController} from '../controllers/transaction.js';
@@ -11,6 +10,5 @@ const TransactionRouter = Router();
 TransactionRouter.get('/', getTransactions);
 TransactionRouter.post('/', validateBody(transactionAddSchema), createTransactionController);
 TransactionRouter.patch('/:transactionId', isValidId, validateBody(transactionUpdateSchema), updateTransactionController);
-
 
 export default TransactionRouter;
