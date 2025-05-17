@@ -7,13 +7,28 @@ export const getAllTransactions = async ({
   perPage = 10,
   sortBy = '_id',
   sortOrder = sortList[0],
+  filters ={}
 }) => {
   const skip = (page - 1) * perPage;
-  const data = await Transaction.find()
+  const transactionsQuery = Transaction.find();
+ if(filters.type) {
+  transactionsQuery.where("type").equals(filters.type);
+ }
+ if(filters.category) {
+  transactionsQuery.where("category").equals(filters.category);
+ }
+ if(filters.minTrabsactionDate){
+  transactionsQuery.where("date").gte(filters.minTrabsactionDate);
+ }
+if(filters.maxTrabsactionDate){
+  transactionsQuery.where("date").lte(filters.maxTrabsactionDate);
+ }
+
+  const data = await transactionsQuery.find()
     .skip(skip)
     .limit(perPage)
     .sort({ [sortBy]: sortOrder });
-  const totalItems = await Transaction.find().countDocuments();
+  const totalItems = await Transaction.find().merge(transactionsQuery).countDocuments();
   const paginationData = calculatePaginationData({ page, perPage, totalItems });
   return {
     data,

@@ -8,14 +8,16 @@ import {
 import { parsePaginationParams,  } from '../utils/parsePaginationParams.js';
 import { transactionsSortFields } from '../db/models/transaction.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
+import { parseTransactionsFilterParams } from '../utils/filters/parseTransactionsFilterParams.js';
 
 
 export const getTransactionsController = async (req, res, next) => {
   try {
     const paginationParams = parsePaginationParams(req.query);
-   const sortParams = parseSortParams(req.query, transactionsSortFields);
-
-    const transactions = await getAllTransactions({ ...paginationParams, ...sortParams });
+    const sortParams = parseSortParams(req.query, transactionsSortFields);
+    
+    const filters = parseTransactionsFilterParams(req.query);
+const transactions = await getAllTransactions({ ...paginationParams, ...sortParams, filters });
 
     res.json({
       status: 200,
