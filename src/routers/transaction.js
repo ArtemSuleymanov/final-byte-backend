@@ -1,16 +1,29 @@
 import { Router } from 'express';
 import { isValidId } from "../middlewares/isValidId.js";
-// import { ctrlWrapper } from "../middlewares/ctrlWrapper.js";
+import ctrlWrapper from '../middlewares/ctrlWrapper.js';
 import { validateBody } from "../utils/validateBody.js";
 
-import {getTransactions, createTransactionController, updateTransactionController} from '../controllers/transaction.js';
+import { createTransactionController, updateTransactionController, deleteTransactionController, getTransactionsController} from '../controllers/transaction.js';
 import { transactionAddSchema, transactionUpdateSchema } from "../validation/transaction.js";
 
 const TransactionRouter = Router();
 
-TransactionRouter.get('/', getTransactions);
-TransactionRouter.post('/', validateBody(transactionAddSchema), createTransactionController);
-TransactionRouter.patch('/:transactionId', isValidId, validateBody(transactionUpdateSchema), updateTransactionController);
+TransactionRouter.get('/', ctrlWrapper(getTransactionsController));
 
+TransactionRouter.post(
+  '/',
+  validateBody(transactionAddSchema),
+  ctrlWrapper(createTransactionController)
+);
+
+TransactionRouter.patch(
+  '/:transactionId',
+  isValidId,
+  validateBody(transactionUpdateSchema),
+  ctrlWrapper(updateTransactionController)
+);
+
+TransactionRouter.delete('/:transactionId',isValidId("transactionId"), ctrlWrapper(deleteTransactionController));
 
 export default TransactionRouter;
+
