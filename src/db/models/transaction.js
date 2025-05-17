@@ -6,7 +6,7 @@ const transactionSchema = new mongoose.Schema({
   category: { type: String, required: true },
   amount: { type: Number, required: true, min: 0, max: 1000000 },
   date: { type: Date, required: true },
-  comment: { type: String, maxlength: 192 }
+  comment: { type: String, maxlength: 192 },
 });
 
 const Transaction = mongoose.model('Transaction', transactionSchema);

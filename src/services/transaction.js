@@ -14,3 +14,6 @@ export const getAllTransactions = async ({page = 1, perPage = 10}) => {
   };
 };
 
+
+export const deleteTransactionById = async (transactionId) =>
+  Transaction.findOneAndDelete({ _id: transactionId });

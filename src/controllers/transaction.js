@@ -1,4 +1,5 @@
-import { getAllTransactions} from '../services/transaction.js';
+import createHttpError from 'http-errors';
+import { deleteTransactionById, getAllTransactions} from '../services/transaction.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
 export const getTransactionsController = async (req, res, next) => {
@@ -13,4 +14,14 @@ export const getTransactionsController = async (req, res, next) => {
  
   };
 
+
+  export const deleteTransactionController = async (req, res) => {
+  const { transactionId } = req.params;
+
+  const data = await deleteTransactionById(transactionId );
+  if (!data) {
+    throw createHttpError(404, `Transaction with ${transactionId} not found`);
+  }
+  res.status(204).send();
+};
 
