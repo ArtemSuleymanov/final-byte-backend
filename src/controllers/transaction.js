@@ -1,34 +1,71 @@
 import createHttpError from 'http-errors';
-import {getAllTransactions, createTransaction, updateTransaction} from '../services/transaction.js';
+import {
+  getAllTransactions,
+  createTransaction,
+  updateTransaction,
+  deleteTransactionById
+} from '../services/transaction.js';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
-export const getTransactions = async (req, res, next) => {
-    const transactions = await getAllTransactions();
-    res.json(transactions);
+export const getTransactionsController = async (req, res, next) => {
+  try {
+    const paginationParams = parsePaginationParams(req.query);
+    const transactions = await getAllTransactions({ ...paginationParams });
+
+    res.json({
+      status: 200,
+      message: "Successfully found transactions",
+      data: transactions,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
-export const createTransactionController = async (req, res) => {
+export const createTransactionController = async (req, res, next) => {
+  try {
     const transaction = await createTransaction(req.body);
 
     res.status(201).json({
-    status: 201,
-    message: 'Successfully created a transaction',
-    data: transaction
-  });
-  
+      status: 201,
+      message: 'Successfully created a transaction',
+      data: transaction,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
-export const updateTransactionController = async (req, res) => {
-  const { transactionId } = req.params;
-  const resultat = await updateTransaction(transactionId, req.body);
+export const updateTransactionController = async (req, res, next) => {
+  try {
+    const { transactionId } = req.params;
+    const resultat = await updateTransaction(transactionId, req.body);
 
-  if(!resultat) {
-    throw createHttpError(404, 'Transaction not found');
+    if (!resultat) {
+      throw createHttpError(404, 'Transaction not found');
+    }
+
+    res.json({
+      status: 200,
+      message: 'Successfully updated a transaction',
+      data: resultat.transaction,
+    });
+  } catch (error) {
+    next(error);
   }
+};
 
-  res.json({
-    status: 200,
-    message: 'Successfully patched a transaction',
-    data: resultat.transaction,
-  });
-   
+export const deleteTransactionController = async (req, res, next) => {
+  try {
+    const { transactionId } = req.params;
+    const data = await deleteTransactionById(transactionId);
+
+    if (!data) {
+      throw createHttpError(404, `Transaction with ID ${transactionId} not found`);
+    }
+
+    res.status(204).send(); 
+  } catch (error) {
+    next(error);
+  }
 };
