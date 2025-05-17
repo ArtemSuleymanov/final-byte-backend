@@ -4,6 +4,7 @@ import cors from 'cors';
 import cookieParser from "cookie-parser";
 import authRouter from './routers/auth.js';
 import TransactionRouter from './routers/transaction.js';
+import UsersRouter from './routers/users.js';
 import {notFoundHandler} from "./middlewares/notFoundHandler.js";
 import {errorHandler} from "./middlewares/errorHandler.js";
 import { getEnvVar } from './utils/getEnvVar.js';
@@ -28,8 +29,9 @@ export const setupServer = () => {
   app.use("/auth", authRouter);
   app.use("/transactions", TransactionRouter);
 
+  app.use("/users", UsersRouter);
+
   app.use("/api-docs", swaggerDocs());
- 
 
   app.use(notFoundHandler);
 
