@@ -28,7 +28,7 @@ const transactionSchema = new mongoose.Schema({
 transactionSchema.post('save', handleSaveError);
 transactionSchema.pre('findOneAndUpdate', setUpdateSettings);
 transactionSchema.post('findOneAndUpdate', handleSaveError);
-export const contactSortFields = ['name', 'phoneNumber', 'email', 'isFavourite', 'contactType'];
+export const transactionsSortFields = ['type', 'category', 'amount', 'date' ];
 
 const Transaction = mongoose.model('Transaction', transactionSchema);
 export default Transaction;
