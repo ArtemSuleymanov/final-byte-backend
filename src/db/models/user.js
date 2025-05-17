@@ -1,24 +1,35 @@
-import { model, Schema } from "mongoose";
+import { Schema, model } from 'mongoose';
 
-import { emailRegexp } from "../../constants/auth.js";
-
-const usersSchema = new Schema(
+const userSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, 'Name is required'],
+      minlength: 2,
+      maxlength: 30,
     },
     email: {
       type: String,
-      required: true,
+      required: [true, 'Email is required'],
       unique: true,
+      match: [/\S+@\S+\.\S+/, 'Email is invalid'],
     },
     password: {
       type: String,
-      required: true,
+      required: [true, 'Password is required'],
+      minlength: 6,
+    },
+    balance: {
+      type: Number,
+      default: 0,
     },
   },
-  { timestamps: true, versionKey: false }
+  {
+    timestamps: true,
+    versionKey: false,
+  },
 );
 
-export const UsersCollection = model("users", usersSchema);
+const UsersCollection = model('user', userSchema);
+
+export default UsersCollection;
