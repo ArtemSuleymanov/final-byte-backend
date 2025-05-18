@@ -1,6 +1,6 @@
+import { sortList } from '../constants/index.js';
 import Transaction from '../db/models/transaction.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
-import { sortList } from '../constants/index.js';
 
 export const getAllTransactions = async ({
   page = 1,

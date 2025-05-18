@@ -6,13 +6,17 @@ import {
   deleteTransactionById
 } from '../services/transaction.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
-import Transaction from '../db/models/transaction.js';
+import Transaction, { transactionsSortFields } from '../db/models/transaction.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { parseTransactionsFilterParams } from '../utils/filters/parseTransactionsFilterParams.js';
 
 export const getTransactionsController = async (req, res, next) => {
   try {
     const paginationParams = parsePaginationParams(req.query);
-    const transactions = await getAllTransactions({ ...paginationParams });
-
+     const sortParams = parseSortParams(req.query, transactionsSortFields);
+    
+    const filters = parseTransactionsFilterParams(req.query);
+const transactions = await getAllTransactions({ ...paginationParams, ...sortParams, filters });
     res.json({
       status: 200,
       message: "Successfully found transactions",
