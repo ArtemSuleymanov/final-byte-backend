@@ -5,20 +5,13 @@ import {
   updateTransaction,
   deleteTransactionById
 } from '../services/transaction.js';
-import { parsePaginationParams,  } from '../utils/parsePaginationParams.js';
-import { transactionsSortFields } from '../db/models/transaction.js';
-import { parseSortParams } from '../utils/parseSortParams.js';
-import { parseTransactionsFilterParams } from '../utils/filters/parseTransactionsFilterParams.js';
-
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import Transaction from '../db/models/transaction.js';
 
 export const getTransactionsController = async (req, res, next) => {
   try {
     const paginationParams = parsePaginationParams(req.query);
-    const sortParams = parseSortParams(req.query, transactionsSortFields);
-    
-    let filters = parseTransactionsFilterParams(req.query);
-
-    const transactions = await getAllTransactions({ ...paginationParams, ...sortParams, filters });
+    const transactions = await getAllTransactions({ ...paginationParams });
 
     res.json({
       status: 200,
@@ -75,5 +68,69 @@ export const deleteTransactionController = async (req, res, next) => {
     res.status(204).send(); 
   } catch (error) {
     next(error);
+  }
+};
+
+
+export const getMonthlySummaryController = async (req, res) => {
+  try {
+    const { yearMonth } = req.params;
+    const [year, month] = yearMonth.split('-').map(Number);
+
+    if (!year || !month || month < 1 || month > 12) {
+      return res.status(400).json({ message: 'Invalid year or month format (use YYYY-MM)' });
+    }
+
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 1); // ексклюзивно
+
+    const transactions = await Transaction.aggregate([
+      {
+        $match: {
+          date: {
+            $gte: startDate,
+            $lt: endDate
+          }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            type: "$type",
+            category: "$category"
+          },
+          totalAmount: { $sum: "$amount" }
+        }
+      }
+    ]);
+
+    // Формування результату
+    const categorySummary = {};
+    let totalIncome = 0;
+    let totalExpense = 0;
+
+    for (const t of transactions) {
+      const { type, category } = t._id;
+      if (!categorySummary[type]) categorySummary[type] = {};
+      categorySummary[type][category] = t.totalAmount;
+
+      if (type === 'income') {
+        totalIncome += t.totalAmount;
+      } else if (type === 'expense') {
+        totalExpense += t.totalAmount;
+      }
+    }
+
+    res.json({
+      categorySummary,
+      totals: {
+        income: totalIncome,
+        expense: totalExpense
+      }
+    });
+
+  } catch (error) {
+    console.error("Error in getMonthlySummary:", error);
+    res.status(500).json({ message: 'Server error' });
   }
 };

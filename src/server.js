@@ -1,14 +1,15 @@
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
-import cookieParser from "cookie-parser";
+import cookieParser from 'cookie-parser';
 import authRouter from './routers/auth.js';
 import TransactionRouter from './routers/transaction.js';
-import {notFoundHandler} from "./middlewares/notFoundHandler.js";
-import {errorHandler} from "./middlewares/errorHandler.js";
+
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import { errorHandler } from './middlewares/errorHandler.js';
 import { getEnvVar } from './utils/getEnvVar.js';
 import { swaggerDocs } from './middlewares/swaggerDocs.js';
-
+import categoriesRouter from './routers/categories.js';
 const PORT = Number(getEnvVar('PORT', '3000'));
 
 export const setupServer = () => {
@@ -25,11 +26,12 @@ export const setupServer = () => {
     }),
   );
 
-  app.use("/auth", authRouter);
-  app.use("/transactions", TransactionRouter);
+  app.use('/auth', authRouter);
+  app.use('/transactions', TransactionRouter);
+  app.use('/categories', categoriesRouter);
 
-  app.use("/api-docs", swaggerDocs());
- 
+
+  app.use('/api-docs', swaggerDocs());
 
   app.use(notFoundHandler);
 

@@ -3,7 +3,7 @@ import { isValidId } from "../middlewares/isValidId.js";
 import ctrlWrapper from '../middlewares/ctrlWrapper.js';
 import { validateBody } from "../utils/validateBody.js";
 
-import { createTransactionController, updateTransactionController, deleteTransactionController, getTransactionsController} from '../controllers/transaction.js';
+import { createTransactionController, updateTransactionController, deleteTransactionController, getTransactionsController, getMonthlySummaryController} from '../controllers/transaction.js';
 import { transactionAddSchema, transactionUpdateSchema } from "../validation/transaction.js";
 
 const TransactionRouter = Router();
@@ -27,3 +27,4 @@ TransactionRouter.delete('/:transactionId',isValidId("transactionId"), ctrlWrapp
 
 export default TransactionRouter;
 
+TransactionRouter.get('/summary/:yearMonth', getMonthlySummaryController);
