@@ -13,12 +13,18 @@ import Transaction, {
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseTransactionsFilterParams } from '../utils/filters/parseTransactionsFilterParams.js';
 
+
 export const getTransactionsController = async (req, res, next) => {
   try {
     const paginationParams = parsePaginationParams(req.query);
     const sortParams = parseSortParams(req.query, transactionsSortFields);
 
     const filters = parseTransactionsFilterParams(req.query);
+       if (!req.user || !req.user._id) {
+      throw createHttpError(401, 'Unauthorized');}
+    filters.userId = req.user._id;
+     
+    
     const transactions = await getAllTransactions({
       ...paginationParams,
       ...sortParams,
@@ -86,7 +92,7 @@ export const deleteTransactionController = async (req, res, next) => {
 };
 
 export const getMonthlySummaryController = async (req, res) => {
-  try {
+
     const { yearMonth } = req.params;
     const [year, month] = yearMonth.split('-').map(Number);
 
@@ -142,8 +148,5 @@ export const getMonthlySummaryController = async (req, res) => {
         expense: totalExpense,
       },
     });
-  } catch (error) {
-    console.error('Error in getMonthlySummary:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
+ 
 };

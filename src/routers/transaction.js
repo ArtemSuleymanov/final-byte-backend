@@ -27,4 +27,4 @@ TransactionRouter.delete('/:transactionId',isValidId("transactionId"), ctrlWrapp
 
 export default TransactionRouter;
 
-TransactionRouter.get('/summary/:yearMonth', getMonthlySummaryController);
+TransactionRouter.get('/summary/:yearMonth',ctrlWrapper(getMonthlySummaryController) );

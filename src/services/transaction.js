@@ -11,6 +11,9 @@ export const getAllTransactions = async ({
 }) => {
   const skip = (page - 1) * perPage;
   const transactionsQuery = Transaction.find();
+  if (filters.userId) {
+    transactionsQuery.where('userId').equals(filters.userId);
+  }
 
   if (filters.type) {
     transactionsQuery.where("type").equals(filters.type);
