@@ -1,0 +1,79 @@
+tags:
+  - Transactions
+summary: Get list of transactions
+operationId: getTransactions
+description: 'Get list of users with this endpoint'
+security:
+  - bearerAuth: []
+parameters:
+  - in: query
+    name: page
+    schema:
+      type: integer
+    example: 1
+  - in: query
+    name: perPage
+    schema:
+      type: integer
+      example: 10
+  - in: query
+    name: sortBy
+    schema:
+      type: string
+      example: 'amount'
+    description: "All transactions fields can be mentioned. Default value - _id"
+  - in: query
+    name: sortOrder
+    schema:
+      type: string
+      enum: ['asc', 'desc']
+      example: 'asc'
+  - in: query
+    name: type
+    schema:
+      type: string
+      enum: ['income', 'expense']
+      example: 'expense'
+    description: "Filter by transactions type"
+  - in: query
+    name: category
+    schema:
+      type: string
+      enum:
+        - Incomes
+        - Main expenses
+        - Products
+        - Car
+        - Self care
+        - Child care
+        - Household products
+        - Education
+        - Leisure
+        - Other expenses
+        - Entertainment
+    example: Products
+    description: "Filter by category"
+  - in: query
+    name: minTransactionDate
+    schema:
+      type: string
+      format: date
+      example: '2025-01-01'
+    description: min transaction date YYYY-MM
+  - in: query
+    name: maxTransactionDate
+    schema:
+      type: string
+      format: date
+      example: '2025-05-01'
+    description: max transaction date YYYY-MM
+  
+responses:
+  '200':
+    $ref: '../../components/responses/200.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '404':
+    $ref: '../../components/responses/404.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

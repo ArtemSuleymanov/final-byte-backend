@@ -1,0 +1,20 @@
+# swagger/paths/contacts/{id}/get.yaml
+tags:
+  - Transactions
+summary: Get transaction by id
+operationId: getTransaction
+description: 'Get transaction by id'
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      example: '65ca67e7ae7f10c88b598384'
+responses:
+  '200':
+      $ref: '../../../components/responses/200.yaml'
+  '401':
+    $ref: '../../../components/responses/401.yaml'

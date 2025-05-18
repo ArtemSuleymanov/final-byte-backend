@@ -1,10 +1,19 @@
 import { Router } from 'express';
-import { isValidId } from "../middlewares/isValidId.js";
+import { isValidId } from '../middlewares/isValidId.js';
 import ctrlWrapper from '../middlewares/ctrlWrapper.js';
-import { validateBody } from "../utils/validateBody.js";
+import { validateBody } from '../utils/validateBody.js';
 
-import { createTransactionController, updateTransactionController, deleteTransactionController, getTransactionsController, getMonthlySummaryController} from '../controllers/transaction.js';
-import { transactionAddSchema, transactionUpdateSchema } from "../validation/transaction.js";
+import {
+  createTransactionController,
+  updateTransactionController,
+  deleteTransactionController,
+  getTransactionsController,
+  getMonthlySummaryController,
+} from '../controllers/transaction.js';
+import {
+  transactionAddSchema,
+  transactionUpdateSchema,
+} from '../validation/transaction.js';
 
 const TransactionRouter = Router();
 
@@ -13,18 +22,25 @@ TransactionRouter.get('/', ctrlWrapper(getTransactionsController));
 TransactionRouter.post(
   '/',
   validateBody(transactionAddSchema),
-  ctrlWrapper(createTransactionController)
+  ctrlWrapper(createTransactionController),
 );
 
 TransactionRouter.patch(
   '/:transactionId',
   isValidId,
   validateBody(transactionUpdateSchema),
-  ctrlWrapper(updateTransactionController)
+  ctrlWrapper(updateTransactionController),
 );
 
-TransactionRouter.delete('/:transactionId',isValidId("transactionId"), ctrlWrapper(deleteTransactionController));
+TransactionRouter.delete(
+  '/:transactionId',
+  isValidId('transactionId'),
+  ctrlWrapper(deleteTransactionController),
+);
 
 export default TransactionRouter;
 
-TransactionRouter.get('/summary/:yearMonth',ctrlWrapper(getMonthlySummaryController) );
+TransactionRouter.get(
+  '/summary/:yearMonth',
+  ctrlWrapper(getMonthlySummaryController),
+);

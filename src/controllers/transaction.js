@@ -1,4 +1,5 @@
 import createHttpError from 'http-errors';
+import mongoose from 'mongoose';
 import {
   getAllTransactions,
   createTransaction,
@@ -91,7 +92,7 @@ export const deleteTransactionController = async (req, res, next) => {
   }
 };
 
-export const getMonthlySummaryController = async (req, res) => {
+export const getMonthlySummaryController = async (req, res, next) => {
 
     const { yearMonth } = req.params;
     const [year, month] = yearMonth.split('-').map(Number);
@@ -102,12 +103,19 @@ export const getMonthlySummaryController = async (req, res) => {
         .json({ message: 'Invalid year or month format (use YYYY-MM)' });
     }
 
+    
+    if (!req.user || !req.user._id) {
+  return res.status(401).json({ message: 'Unauthorized: user not authenticated' });
+}
+const { _id: userId } = req.user;
+
     const startDate = new Date(year, month - 1, 1);
-    const endDate = new Date(year, month, 1); // ексклюзивно
+    const endDate = new Date(year, month, 1); // ексклюзивна дата
 
     const transactions = await Transaction.aggregate([
       {
         $match: {
+          userId: new mongoose.Types.ObjectId(userId),
           date: {
             $gte: startDate,
             $lt: endDate,
@@ -148,5 +156,5 @@ export const getMonthlySummaryController = async (req, res) => {
         expense: totalExpense,
       },
     });
- 
+  
 };

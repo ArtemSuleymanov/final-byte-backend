@@ -16,4 +16,4 @@ content:
               example: Successfully created a contact!
             data:
               type: object
-              $ref: '../../components/schemas/contact.yaml'
+              $ref: ../schemas/transactions.yaml
