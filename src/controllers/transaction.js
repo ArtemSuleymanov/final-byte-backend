@@ -104,7 +104,8 @@ export const getMonthlySummaryController = async (req, res) => {
       }
     ]);
 
-    // Формування результату
+
+
     const categorySummary = {};
     let totalIncome = 0;
     let totalExpense = 0;
