@@ -9,10 +9,22 @@ info:
 tags:
   - name: Auth
     description: Operations related to user interaction with the application
+  - name: Transactions
+    description: Operations related to transactions management
 servers:
   - url: https://yourdomain.dev/api
   # - url: https://nodejs-hw-mongodb-0u7h.onrender.com
 paths:
+  /transactions:
+    get:
+      $ref: "../swagger/paths/transactions/get.yaml"
+    post: 
+      $ref: "../swagger/paths/transactions/post.yaml"
+  /transactions/{id}:
+    get:
+      $ref: ../swagger/paths/transactions/{id}/get.yaml
+    patch:
+      $ref: ../swagger/paths/transactions/{id}/patch.yaml
   /auth/register:
     post:
       $ref: '../swagger/paths/auth/register.yaml'

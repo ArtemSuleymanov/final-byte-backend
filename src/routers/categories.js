@@ -1,3 +1,5 @@
+
+
 import { Router } from 'express';
 import { getCategories } from '../controllers/categories.js';
 

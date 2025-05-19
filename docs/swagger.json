@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "version": "1.0.0",
-    "title": "Spendy",
+    "title": "Spendy app",
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -18,9 +18,356 @@
     {
       "name": "Auth",
       "description": "Operations related to user interaction with the application"
+    },
+    {
+      "name": "Transactions",
+      "description": "Operations related to transactions management"
     }
   ],
   "paths": {
+    "/transactions": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get list of transactions",
+        "operationId": "getTransactions",
+        "description": "Get list of users with this endpoint",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string",
+              "example": "amount"
+            },
+            "description": "All transactions fields can be mentioned. Default value - _id"
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "example": "asc"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "income",
+                "expense"
+              ],
+              "example": "expense"
+            },
+            "description": "Filter by transactions type"
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Incomes",
+                "Main expenses",
+                "Products",
+                "Car",
+                "Self care",
+                "Child care",
+                "Household products",
+                "Education",
+                "Leisure",
+                "Other expenses",
+                "Entertainment"
+              ]
+            },
+            "example": "Products",
+            "description": "Filter by category"
+          },
+          {
+            "in": "query",
+            "name": "minTransactionDate",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2025-01-01"
+            },
+            "description": "min transaction date YYYY-MM"
+          },
+          {
+            "in": "query",
+            "name": "maxTransactionDate",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2025-05-01"
+            },
+            "description": "max transaction date YYYY-MM"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Create transactions",
+        "operationId": "createTransactiob",
+        "description": "Create a transaction with payload",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "category",
+                  "amount",
+                  "date"
+                ],
+                "properties": {
+                  "type": {
+                    "description": "type of transaction",
+                    "type": "string",
+                    "enum": [
+                      "income",
+                      "expense"
+                    ]
+                  },
+                  "category": {
+                    "description": "category of transaction",
+                    "type": "string",
+                    "enum": [
+                      "Incomes",
+                      "Main expenses",
+                      "Products",
+                      "Car",
+                      "Self care",
+                      "Child care",
+                      "Household products",
+                      "Education",
+                      "Leisure",
+                      "Other expenses",
+                      "Entertainment"
+                    ],
+                    "example": "Car"
+                  },
+                  "amount": {
+                    "description": "trunsaction amount",
+                    "type": "number",
+                    "example": 2000
+                  },
+                  "date": {
+                    "description": "operation date",
+                    "type": "string",
+                    "format": "date",
+                    "example": "2025-10-08"
+                  },
+                  "userId": {
+                    "description": "Contact's user id",
+                    "type": "string",
+                    "example": "65e4decdd286b30065d54af9"
+                  },
+                  "comment": {
+                    "description": "trunsaction acomment",
+                    "type": "string",
+                    "example": "for fix car"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/201"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/transactions/{id}": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get transaction by id",
+        "operationId": "getTransaction",
+        "description": "Get transaction by id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "65ca67e7ae7f10c88b598384"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Update transaction",
+        "operationId": "updateTransactionby",
+        "description": "Update a transaction with payload",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "type",
+                "category",
+                "amount",
+                "date"
+              ],
+              "properties": {
+                "type": {
+                  "description": "type of transaction",
+                  "type": "string",
+                  "enum": [
+                    "income",
+                    "expense"
+                  ]
+                },
+                "category": {
+                  "description": "category of transaction",
+                  "type": "string",
+                  "enum": [
+                    "Incomes",
+                    "Main expenses",
+                    "Products",
+                    "Car",
+                    "Self care",
+                    "Child care",
+                    "Household products",
+                    "Education",
+                    "Leisure",
+                    "Other expenses",
+                    "Entertainment"
+                  ],
+                  "example": "Car"
+                },
+                "amount": {
+                  "description": "trunsaction amount",
+                  "type": "number",
+                  "example": 2000
+                },
+                "date": {
+                  "description": "operation date",
+                  "type": "string",
+                  "format": "date",
+                  "example": "2025-10-08"
+                },
+                "userId": {
+                  "description": "Contact's user id",
+                  "type": "string",
+                  "example": "65e4decdd286b30065d54af9"
+                },
+                "comment": {
+                  "description": "trunsaction acomment",
+                  "type": "string",
+                  "example": "for fix car"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
     "/auth/register": {
       "post": {
         "tags": [
@@ -41,7 +388,7 @@
         },
         "responses": {
           "201": {
-            "$ref": "#/components/responses/201"
+            "$ref": "#/components/responses/201-2"
           },
           "400": {
             "$ref": "#/components/responses/400"
@@ -149,6 +496,9 @@
           "204": {
             "description": "Successfully logged out, no content"
           },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -174,6 +524,70 @@
       }
     },
     "schemas": {
+      "transactions": {
+        "type": "object",
+        "required": [
+          "_id",
+          "type",
+          "category",
+          "amount",
+          "date",
+          "userId"
+        ],
+        "properties": {
+          "_id": {
+            "description": "transaction ids id",
+            "type": "string",
+            "example": "65e4decdd286b30065d54af9"
+          },
+          "type": {
+            "description": "type of transaction",
+            "type": "string",
+            "enum": [
+              "income",
+              "expense"
+            ]
+          },
+          "category": {
+            "description": "category of transaction",
+            "type": "string",
+            "enum": [
+              "Incomes",
+              "Main expenses",
+              "Products",
+              "Car",
+              "Self care",
+              "Child care",
+              "Household products",
+              "Education",
+              "Leisure",
+              "Other expenses",
+              "Entertainment"
+            ],
+            "example": "Car"
+          },
+          "amount": {
+            "description": "trunsaction amount",
+            "type": "number",
+            "example": 2000
+          },
+          "date": {
+            "description": "operation date",
+            "format": "date",
+            "example": "2025-10-08"
+          },
+          "userId": {
+            "description": "Contact's user id",
+            "type": "string",
+            "example": "65e4decdd286b30065d54af9"
+          },
+          "comment": {
+            "description": "trunsaction acomment",
+            "type": "string",
+            "example": "for fix car"
+          }
+        }
+      },
       "authRegisterSchema": {
         "type": "object",
         "required": [
@@ -220,8 +634,47 @@
       }
     },
     "responses": {
+      "200": {
+        "description": "Successfully found contacts!",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Successfully found contacts!"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/transactions"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "201": {
-        "description": "User registration",
+        "description": "Creates a contact",
         "content": {
           "application/json": {
             "schema": {
@@ -238,11 +691,11 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Successfully registered a user!"
+                  "example": "Successfully created a contact!"
                 },
                 "data": {
                   "type": "object",
-                  "$ref": "#/components/schemas/authRegisterSchema"
+                  "$ref": "#/components/schemas/transactions"
                 }
               }
             }
@@ -323,6 +776,43 @@
           }
         }
       },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Not found"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "transaction not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "500": {
         "description": "Internal Server Error",
         "content": {
@@ -354,6 +844,35 @@
                       "example": "Something went wrong on the server"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      },
+      "201-2": {
+        "description": "User registration",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 201
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Successfully registered a user!"
+                },
+                "data": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/authRegisterSchema"
                 }
               }
             }
