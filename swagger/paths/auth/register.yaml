@@ -11,7 +11,7 @@ requestBody:
         $ref: '../../components/schemas/auth/authRegisterSchema.yaml'
 responses:
   '201':
-    $ref: '../../components/responses/auth/201.yaml'
+    $ref: '../../components/responses/auth/201_register.yaml'
   '400':
     $ref: '../../components/responses/400.yaml'
   '500':

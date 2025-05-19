@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "https://yourdomain.dev/api"
+      "url": "http://localhost:3000"
     }
   ],
   "tags": [
@@ -388,7 +388,7 @@
         },
         "responses": {
           "201": {
-            "$ref": "#/components/responses/201-2"
+            "$ref": "#/components/responses/201_register"
           },
           "400": {
             "$ref": "#/components/responses/400"
@@ -850,7 +850,7 @@
           }
         }
       },
-      "201-2": {
+      "201_register": {
         "description": "User registration",
         "content": {
           "application/json": {
