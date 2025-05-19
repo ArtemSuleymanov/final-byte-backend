@@ -25,6 +25,9 @@ paths:
       $ref: ../swagger/paths/transactions/{id}/get.yaml
     patch:
       $ref: ../swagger/paths/transactions/{id}/patch.yaml
+  /transactions/summary/{yearMonth}:
+    get:
+      $ref: ../swagger/paths/transactions/by-date/get.yaml
   /auth/register:
     post:
       $ref: '../swagger/paths/auth/register.yaml'

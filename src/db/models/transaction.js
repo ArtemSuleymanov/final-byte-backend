@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { handleSaveError, setUpdateSettings } from './hooks.js';
 import { categoriesList, typeList } from '../../constants/transactions.js';
 const transactionSchema = new mongoose.Schema({
-  // userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   type: { type: String, enum: typeList, required: true },
   category: {
     type: String,
