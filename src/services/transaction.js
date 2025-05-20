@@ -75,5 +75,5 @@ export const updateTransaction = async (
   };
 };
 
-export const deleteTransactionById = async (transactionId) =>
-  Transaction.findOneAndDelete({ _id: transactionId });
+export const deleteTransactionById = async (transactionId, userId) =>
+  Transaction.findOneAndDelete({ _id: transactionId,  userId});
