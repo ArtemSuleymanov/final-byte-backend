@@ -11,10 +11,16 @@ tags:
     description: Operations related to user interaction with the application
   - name: Transactions
     description: Operations related to transactions management
+  - name: User
+    description: Operations related to the output of user data
+  
 servers:
   - url: http://localhost:3000
   - url: https://final-byte-backend.onrender.com
 paths:
+  /users/user:
+    get: 
+     $ref: '../swagger/paths/users/users.yaml'
   /transactions:
     get:
       $ref: '../swagger/paths/transactions/get.yaml'
@@ -40,6 +46,8 @@ paths:
   /auth/logout:
     post:
       $ref: '../swagger/paths/auth/logout.yaml'
+  
 components:
+  
   securitySchemes:
     $ref: '../swagger/components/schemas/auth/securitySchemes.yaml'

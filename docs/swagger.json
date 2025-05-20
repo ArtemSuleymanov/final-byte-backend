@@ -22,9 +22,84 @@
     {
       "name": "Transactions",
       "description": "Operations related to transactions management"
+    },
+    {
+      "name": "User",
+      "description": "Operations related to the output of user data"
     }
   ],
   "paths": {
+    "/users/user": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get current authorized user",
+        "description": "Returns the authenticated user's data (name, email, balance).",
+        "operationId": "getCurrentUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully fetched current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found user!"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "example": "john@example.com"
+                        },
+                        "balance": {
+                          "type": "number",
+                          "example": 100
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized  - user is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User is unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/transactions": {
       "get": {
         "tags": [
