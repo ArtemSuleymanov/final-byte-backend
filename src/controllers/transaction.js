@@ -36,56 +36,50 @@ export const getTransactionsController = async (req, res, next) => {
 };
 
 export const createTransactionController = async (req, res, next) => {
-   const { _id: userId } = req.user;
-  try {
-    if (!userId ) {
+  const { _id: userId } = req.user;
+
+  if (!userId) {
     throw createHttpError(401, 'Unauthorized');
   }
-    const transaction = await createTransaction({...req.body, userId} );
+  const transaction = await createTransaction({ ...req.body, userId });
 
-    res.status(201).json({
-      status: 201,
-      message: 'Successfully created a transaction',
-      data: transaction,
-    });
-  } catch (error) {
-    next(error);
-  }
+  res.status(201).json({
+    status: 201,
+    message: 'Successfully created a transaction',
+    data: transaction,
+  });
 };
 
 export const updateTransactionController = async (req, res, next) => {
-  try {
-    const { transactionId } = req.params;
-    const resultat = await updateTransaction(transactionId, req.body);
+  const { transactionId } = req.params;
+  const resultat = await updateTransaction(transactionId, req.body);
 
-    if (!resultat) {
-      throw createHttpError(404, 'Transaction not found');
-    }
-
-    res.json({
-      status: 200,
-      message: 'Successfully updated a transaction',
-      data: resultat.transaction,
-    });
-  } catch (error) {
-    next(error);
+  if (!resultat) {
+    throw createHttpError(404, 'Transaction not found');
   }
+
+  res.json({
+    status: 200,
+    message: 'Successfully updated a transaction',
+    data: resultat.transaction,
+  });
 };
 
 export const deleteTransactionController = async (req, res, next) => {
-    const { transactionId } = req.params;
-     const { _id: userId } = req.user;
-    const data = await deleteTransactionById(transactionId, userId);
+  const { transactionId } = req.params;
+  const { _id: userId } = req.user;
+  const data = await deleteTransactionById(transactionId, userId);
 
-    if (!data) {
-      throw createHttpError(
-        404,
-        `Transaction with ID ${transactionId} not found`,
-      );
-    }
-
-
- 
+  if (!data) {
+    throw createHttpError(
+      404,
+      `Transaction with ID ${transactionId} not found`,
+    );
+  }
+  res.status(204).json({
+    status: 204,
+    message: 'Successfully deleted a transaction',
+  });
 };
 
 export const getMonthlySummaryController = async (req, res, next) => {
