@@ -39,6 +39,7 @@ export const createTransactionController = async (req, res, next) => {
   const { _id: userId } = req.user;
 
 
+
   if (!userId) {
     throw createHttpError(401, 'Unauthorized');
   }
@@ -80,9 +81,10 @@ export const deleteTransactionController = async (req, res, next) => {
   }
 
 
-  res.status(204).end();
 
+  res.status(204).end();
 };
+
 
 export const getMonthlySummaryController = async (req, res, next) => {
   const { yearMonth } = req.params;
