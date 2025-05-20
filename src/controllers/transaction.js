@@ -46,6 +46,7 @@ export const createTransactionController = async (req, res, next) => {
   const transaction = await createTransaction({ ...req.body, userId });
 
 
+
   res.status(201).json({
     status: 201,
     message: 'Successfully created a transaction',
@@ -82,7 +83,9 @@ export const deleteTransactionController = async (req, res, next) => {
 
 
 
+
   res.status(204).end();
+
 };
 
 
