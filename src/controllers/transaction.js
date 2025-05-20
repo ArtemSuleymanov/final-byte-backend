@@ -38,10 +38,12 @@ export const getTransactionsController = async (req, res, next) => {
 export const createTransactionController = async (req, res, next) => {
   const { _id: userId } = req.user;
 
+
   if (!userId) {
     throw createHttpError(401, 'Unauthorized');
   }
   const transaction = await createTransaction({ ...req.body, userId });
+
 
   res.status(201).json({
     status: 201,
@@ -77,7 +79,9 @@ export const deleteTransactionController = async (req, res, next) => {
     );
   }
 
+
   res.status(204).end();
+
 };
 
 export const getMonthlySummaryController = async (req, res, next) => {
