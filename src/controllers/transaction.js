@@ -76,7 +76,8 @@ export const deleteTransactionController = async (req, res, next) => {
       `Transaction with ID ${transactionId} not found`,
     );
   }
- res.status(204).end();
+
+  res.status(204).end();
 };
 
 export const getMonthlySummaryController = async (req, res, next) => {
