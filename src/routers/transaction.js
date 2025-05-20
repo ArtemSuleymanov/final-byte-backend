@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { isValidId } from '../middlewares/isValidId.js';
 import ctrlWrapper from '../middlewares/ctrlWrapper.js';
 import { validateBody } from '../utils/validateBody.js';
-
+import {authenticate} from '../middlewares/authenticate.js';
 import {
   createTransactionController,
   updateTransactionController,
@@ -16,7 +16,7 @@ import {
 } from '../validation/transaction.js';
 
 const TransactionRouter = Router();
-
+TransactionRouter.use(authenticate);
 TransactionRouter.get('/', ctrlWrapper(getTransactionsController));
 
 TransactionRouter.post(

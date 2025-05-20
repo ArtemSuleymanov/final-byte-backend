@@ -151,8 +151,8 @@
         "tags": [
           "Transactions"
         ],
-        "summary": "Create transactions",
-        "operationId": "createTransactiob",
+        "summary": "Create transaction",
+        "operationId": "createTransaction",
         "description": "Create a transaction with payload",
         "security": [
           {
@@ -160,8 +160,9 @@
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "type": "object",
                 "required": [
@@ -172,7 +173,7 @@
                 ],
                 "properties": {
                   "type": {
-                    "description": "type of transaction",
+                    "description": "Type of transaction",
                     "type": "string",
                     "enum": [
                       "income",
@@ -180,7 +181,7 @@
                     ]
                   },
                   "category": {
-                    "description": "category of transaction",
+                    "description": "Category of transaction",
                     "type": "string",
                     "enum": [
                       "Incomes",
@@ -198,25 +199,25 @@
                     "example": "Car"
                   },
                   "amount": {
-                    "description": "trunsaction amount",
+                    "description": "Transaction amount",
                     "type": "number",
                     "example": 2000
                   },
                   "date": {
-                    "description": "operation date",
+                    "description": "Operation date",
                     "type": "string",
                     "format": "date",
                     "example": "2025-10-08"
                   },
                   "userId": {
-                    "description": "Contact's user id",
+                    "description": "User ID (will be added automatically on backend)",
                     "type": "string",
                     "example": "65e4decdd286b30065d54af9"
                   },
                   "comment": {
-                    "description": "trunsaction acomment",
+                    "description": "Transaction comment",
                     "type": "string",
-                    "example": "for fix car"
+                    "example": "for fixing car"
                   }
                 }
               }
@@ -364,6 +365,43 @@
           },
           "500": {
             "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/transactions/summary/{yearMonth}": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get transaction by date",
+        "operationId": "getTransactionByDate",
+        "description": "Get transaction by date",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "yearMonth",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2025-28"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           }
         }
       }

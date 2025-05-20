@@ -13,7 +13,7 @@ tags:
     description: Operations related to transactions management
 servers:
   - url: http://localhost:3000
-  # - url: https://nodejs-hw-mongodb-0u7h.onrender.com
+  - url: https://final-byte-backend.onrender.com
 paths:
   /transactions:
     get:
@@ -25,6 +25,9 @@ paths:
       $ref: ../swagger/paths/transactions/{id}/get.yaml
     patch:
       $ref: ../swagger/paths/transactions/{id}/patch.yaml
+  /transactions/summary/{yearMonth}:
+    get:
+      $ref: ../swagger/paths/transactions/by-date/get.yaml
   /auth/register:
     post:
       $ref: '../swagger/paths/auth/register.yaml'
