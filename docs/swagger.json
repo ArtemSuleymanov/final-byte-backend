@@ -12,6 +12,9 @@
   "servers": [
     {
       "url": "http://localhost:3000"
+    },
+    {
+      "url": "https://final-byte-backend.onrender.com"
     }
   ],
   "tags": [
@@ -29,7 +32,7 @@
     }
   ],
   "paths": {
-    "/users/user": {
+    "/users/current": {
       "get": {
         "tags": [
           "User"
