@@ -50,13 +50,13 @@ export const createTransaction = async (payload) => {
   return transaction;
 };      
 
-export const updateTransaction = async (
+export const updateTransaction = async ( userId,
   transactionId,
   payload,
   options = {},
 ) => {
   const rawResult = await Transaction.findOneAndUpdate(
-    { _id: transactionId },
+    { transactionId, userId },
     payload,
     {
       new: true,
