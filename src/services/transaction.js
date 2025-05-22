@@ -48,15 +48,15 @@ const totalItems = await transactionsQuery.clone().countDocuments();
 export const createTransaction = async (payload) => {
   const transaction = await Transaction.create(payload);
   return transaction;
-};
+};      
 
-export const updateTransaction = async (
-  transactionId,
+export const updateTransaction = async ( userId,
+  _id,
   payload,
   options = {},
 ) => {
   const rawResult = await Transaction.findOneAndUpdate(
-    { _id: transactionId },
+    { _id, userId },
     payload,
     {
       new: true,

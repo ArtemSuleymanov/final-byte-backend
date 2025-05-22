@@ -38,14 +38,10 @@ export const getTransactionsController = async (req, res, next) => {
 export const createTransactionController = async (req, res, next) => {
   const { _id: userId } = req.user;
 
-
-
   if (!userId) {
     throw createHttpError(401, 'Unauthorized');
   }
   const transaction = await createTransaction({ ...req.body, userId });
-
-
 
   res.status(201).json({
     status: 201,
@@ -56,7 +52,8 @@ export const createTransactionController = async (req, res, next) => {
 
 export const updateTransactionController = async (req, res, next) => {
   const { transactionId } = req.params;
-  const resultat = await updateTransaction(transactionId, req.body);
+  const { _id: userId } = req.user;
+  const resultat = await updateTransaction(userId, transactionId, req.body);
 
   if (!resultat) {
     throw createHttpError(404, 'Transaction not found');
