@@ -1,0 +1,14 @@
+tags:
+  - Auth
+summary: Logout user
+operationId: logoutUser
+description: Logs out the user by clearing session and refresh tokens
+responses:
+  '204':
+    description: Successfully logged out, no content
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'
+security:
+  - cookieAuth: []

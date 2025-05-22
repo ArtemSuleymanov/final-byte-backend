@@ -1,0 +1,1039 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Spendy app",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "description": "This is a documentation of my spendy app"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    },
+    {
+      "url": "https://final-byte-backend.onrender.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Operations related to user interaction with the application"
+    },
+    {
+      "name": "Transactions",
+      "description": "Operations related to transactions management"
+    },
+    {
+      "name": "User",
+      "description": "Operations related to the output of user data"
+    }
+  ],
+  "paths": {
+    "/users/current": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get current authorized user",
+        "description": "Returns the authenticated user's data (name, email, balance).",
+        "operationId": "getCurrentUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully fetched current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found user!"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "example": "john@example.com"
+                        },
+                        "balance": {
+                          "type": "number",
+                          "example": 100
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized  - user is not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User is unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get list of transactions",
+        "operationId": "getTransactions",
+        "description": "Get list of users with this endpoint",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string",
+              "example": "amount"
+            },
+            "description": "All transactions fields can be mentioned. Default value - _id"
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "example": "asc"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "income",
+                "expense"
+              ],
+              "example": "expense"
+            },
+            "description": "Filter by transactions type"
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Incomes",
+                "Main expenses",
+                "Products",
+                "Car",
+                "Self care",
+                "Child care",
+                "Household products",
+                "Education",
+                "Leisure",
+                "Other expenses",
+                "Entertainment"
+              ]
+            },
+            "example": "Products",
+            "description": "Filter by category"
+          },
+          {
+            "in": "query",
+            "name": "minTransactionDate",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2025-01-01"
+            },
+            "description": "min transaction date YYYY-MM"
+          },
+          {
+            "in": "query",
+            "name": "maxTransactionDate",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2025-05-01"
+            },
+            "description": "max transaction date YYYY-MM"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Create transaction",
+        "operationId": "createTransaction",
+        "description": "Create a transaction with payload",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "category",
+                  "amount",
+                  "date"
+                ],
+                "properties": {
+                  "type": {
+                    "description": "Type of transaction",
+                    "type": "string",
+                    "enum": [
+                      "income",
+                      "expense"
+                    ]
+                  },
+                  "category": {
+                    "description": "Category of transaction",
+                    "type": "string",
+                    "enum": [
+                      "Incomes",
+                      "Main expenses",
+                      "Products",
+                      "Car",
+                      "Self care",
+                      "Child care",
+                      "Household products",
+                      "Education",
+                      "Leisure",
+                      "Other expenses",
+                      "Entertainment"
+                    ],
+                    "example": "Car"
+                  },
+                  "amount": {
+                    "description": "Transaction amount",
+                    "type": "number",
+                    "example": 2000
+                  },
+                  "date": {
+                    "description": "Operation date",
+                    "type": "string",
+                    "format": "date",
+                    "example": "2025-10-08"
+                  },
+                  "userId": {
+                    "description": "User ID (will be added automatically on backend)",
+                    "type": "string",
+                    "example": "65e4decdd286b30065d54af9"
+                  },
+                  "comment": {
+                    "description": "Transaction comment",
+                    "type": "string",
+                    "example": "for fixing car"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/201"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/transactions/{id}": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get transaction by id",
+        "operationId": "getTransaction",
+        "description": "Get transaction by id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "65ca67e7ae7f10c88b598384"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Update transaction",
+        "operationId": "updateTransactionby",
+        "description": "Update a transaction with payload",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "type",
+                "category",
+                "amount",
+                "date"
+              ],
+              "properties": {
+                "type": {
+                  "description": "type of transaction",
+                  "type": "string",
+                  "enum": [
+                    "income",
+                    "expense"
+                  ]
+                },
+                "category": {
+                  "description": "category of transaction",
+                  "type": "string",
+                  "enum": [
+                    "Incomes",
+                    "Main expenses",
+                    "Products",
+                    "Car",
+                    "Self care",
+                    "Child care",
+                    "Household products",
+                    "Education",
+                    "Leisure",
+                    "Other expenses",
+                    "Entertainment"
+                  ],
+                  "example": "Car"
+                },
+                "amount": {
+                  "description": "trunsaction amount",
+                  "type": "number",
+                  "example": 2000
+                },
+                "date": {
+                  "description": "operation date",
+                  "type": "string",
+                  "format": "date",
+                  "example": "2025-10-08"
+                },
+                "userId": {
+                  "description": "Contact's user id",
+                  "type": "string",
+                  "example": "65e4decdd286b30065d54af9"
+                },
+                "comment": {
+                  "description": "trunsaction acomment",
+                  "type": "string",
+                  "example": "for fix car"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/transactions/summary/{yearMonth}": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get transaction by date",
+        "operationId": "getTransactionByDate",
+        "description": "Get transaction by date",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "yearMonth",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2025-28"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "User registration",
+        "operationId": "registerUser",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/authRegisterSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/201_register"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "User login",
+        "operationId": "loginUser",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/authLoginSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/200_login"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Refresh user session",
+        "operationId": "refreshSession",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully refreshed a session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully refreshed a session!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR..."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logout user",
+        "operationId": "logoutUser",
+        "description": "Logs out the user by clearing session and refresh tokens",
+        "responses": {
+          "204": {
+            "description": "Successfully logged out, no content"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "sessionId"
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "transactions": {
+        "type": "object",
+        "required": [
+          "_id",
+          "type",
+          "category",
+          "amount",
+          "date",
+          "userId"
+        ],
+        "properties": {
+          "_id": {
+            "description": "transaction ids id",
+            "type": "string",
+            "example": "65e4decdd286b30065d54af9"
+          },
+          "type": {
+            "description": "type of transaction",
+            "type": "string",
+            "enum": [
+              "income",
+              "expense"
+            ]
+          },
+          "category": {
+            "description": "category of transaction",
+            "type": "string",
+            "enum": [
+              "Incomes",
+              "Main expenses",
+              "Products",
+              "Car",
+              "Self care",
+              "Child care",
+              "Household products",
+              "Education",
+              "Leisure",
+              "Other expenses",
+              "Entertainment"
+            ],
+            "example": "Car"
+          },
+          "amount": {
+            "description": "trunsaction amount",
+            "type": "number",
+            "example": 2000
+          },
+          "date": {
+            "description": "operation date",
+            "format": "date",
+            "example": "2025-10-08"
+          },
+          "userId": {
+            "description": "Contact's user id",
+            "type": "string",
+            "example": "65e4decdd286b30065d54af9"
+          },
+          "comment": {
+            "description": "trunsaction acomment",
+            "type": "string",
+            "example": "for fix car"
+          }
+        }
+      },
+      "authRegisterSchema": {
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 32
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 64
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 64
+          }
+        }
+      },
+      "authLoginSchema": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 64
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 64
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Successfully found contacts!",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Successfully found contacts!"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/transactions"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "201": {
+        "description": "Creates a contact",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 201
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Successfully created a contact!"
+                },
+                "data": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/transactions"
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Bad request"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 401
+                },
+                "message": {
+                  "type": "string",
+                  "example": "UnauthorizedError"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Access token expired"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Not found"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "transaction not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 500
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Internal Server Error"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Something went wrong on the server"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "201_register": {
+        "description": "User registration",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 201
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Successfully registered a user!"
+                },
+                "data": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/authRegisterSchema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "200_login": {
+        "description": "Successful user login!",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Successfully logged in an user!"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/authLoginSchema"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-description: Not found
+description: Successful user login!
 content:
   application/json:
     schema:
@@ -10,15 +10,16 @@ content:
       properties:
         status:
           type: integer
-          example: 404
+          example: 200
         message:
           type: string
-          example: Not found
+          example: Successfully logged in an user!
         data:
           type: object
           required:
-            - message
+            - data
           properties:
-            message:
-              type: string
-              example: 'transaction not found'
+            data:
+              type: array
+              items:
+                $ref: '../../../components/schemas/auth/authLoginSchema.yaml'

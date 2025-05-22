@@ -1,0 +1,18 @@
+tags:
+  - Auth
+summary: User registration
+operationId: registerUser
+security: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/schemas/auth/authRegisterSchema.yaml'
+responses:
+  '201':
+    $ref: '../../components/responses/auth/201_register.yaml'
+  '400':
+    $ref: '../../components/responses/400.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

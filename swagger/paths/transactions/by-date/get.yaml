@@ -1,0 +1,22 @@
+# swagger/paths/transactions/by-date/{date}/get.yaml
+tags:
+  - Transactions
+summary: Get transaction by date
+operationId: getTransactionByDate
+description: 'Get transaction by date'
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: yearMonth
+    required: true
+    schema:
+      type: string
+      example: '2025-28'
+responses:
+  '200':
+    $ref: '../../../components/responses/200.yaml'
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+  '404':
+    $ref: '../../../components/responses/404.yaml'

@@ -22,4 +22,4 @@ content:
                 data:
                   type: array
                   items:
-                    $ref: ../schemas/contact.yaml
+                    $ref: ../schemas/transactions.yaml

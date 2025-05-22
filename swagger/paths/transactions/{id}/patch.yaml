@@ -1,0 +1,68 @@
+tags:
+  - Transactions
+summary: Update transaction
+operationId: updateTransactionby
+description: 'Update a transaction with payload'
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+        type: object
+        required:
+          - type
+          - category
+          - amount
+          - date
+        properties:
+          type:
+            description: "type of transaction"
+            type: string
+            enum: ['income', 'expense']
+          category:
+            description: "category of transaction"
+            type: string
+            enum: [
+              'Incomes',
+              'Main expenses',
+              'Products',
+              'Car',
+              'Self care',
+              'Child care',
+              'Household products',
+              'Education',
+              'Leisure',
+              'Other expenses',
+              'Entertainment',
+            ]
+            example: "Car"
+          amount:
+            description: "trunsaction amount"
+            type: number
+            example: 2000
+          date:
+            description: "operation date"
+            type: string
+            format: date
+            example: "2025-10-08"
+          userId:
+            description: "Contact's user id"
+            type: string
+            example: 65e4decdd286b30065d54af9
+          comment:
+            description: "trunsaction acomment"
+            type: string
+            example: "for fix car"
+responses:
+  '200':
+    $ref: '../../../components/responses/200.yaml'
+  '400':
+    $ref: '../../../components/responses/400.yaml'
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+  '404':
+    $ref: '../../../components/responses/404.yaml'
+  '500':
+    $ref: '../../../components/responses/500.yaml'

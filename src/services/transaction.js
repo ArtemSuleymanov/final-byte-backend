@@ -1,16 +1,47 @@
-import Transaction from "../db/models/transaction.js";
-import { calculatePaginationData } from "../utils/calculatePaginationData.js";
+import { sortList } from '../constants/index.js';
+import Transaction from '../db/models/transaction.js';
+import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
-export const getAllTransactions = async ({page = 1, perPage = 10}) => {
-  const skip = (page-1) * perPage;
-  const data = await Transaction.find().skip(skip).limit(perPage);
-  const totalItems = await Transaction.find().countDocuments();
-  const paginationData = calculatePaginationData({page , perPage,totalItems });
+export const getAllTransactions = async ({
+  page = 1,
+  perPage = 10,
+  sortBy = '_id',
+  sortOrder = sortList[0],
+  filters = {}
+}) => {
+  const skip = (page - 1) * perPage;
+  const transactionsQuery = Transaction.find();
+  if (filters.userId) {
+    transactionsQuery.where('userId').equals(filters.userId);
+  }
+
+  if (filters.type) {
+    transactionsQuery.where("type").equals(filters.type);
+  }
+  if (filters.category) {
+    transactionsQuery.where("category").equals(filters.category);
+  }
+  if (filters.minTransactionDate) {
+    transactionsQuery.where("date").gte(filters.minTransactionDate);
+  }
+  if (filters.maxTransactionDate) {
+    const endOfDay = new Date(filters.maxTransactionDate);
+    endOfDay.setHours(24, 0, 0, 0);
+    transactionsQuery.where("date").lte(endOfDay);
+  }
+
+  const data = await transactionsQuery
+    .skip(skip)
+    .limit(perPage)
+    .sort({ [sortBy]: sortOrder });
+
+const totalItems = await transactionsQuery.clone().countDocuments();
+  const paginationData = calculatePaginationData({ page, perPage, totalItems });
+
   return {
     data,
     totalItems,
-    ...paginationData,    
-  
+    ...paginationData,
   };
 };
 
@@ -19,7 +50,11 @@ export const createTransaction = async (payload) => {
   return transaction;
 };      
 
-export const updateTransaction = async (transactionId, payload, options = {}) => {
+export const updateTransaction = async (
+  transactionId,
+  payload,
+  options = {},
+) => {
   const rawResult = await Transaction.findOneAndUpdate(
     { _id: transactionId },
     payload,
@@ -30,9 +65,9 @@ export const updateTransaction = async (transactionId, payload, options = {}) =>
     },
   );
 
-  if(!rawResult || !rawResult.value){
+  if (!rawResult || !rawResult.value) {
     return null;
-  };
+  }
 
   return {
     transaction: rawResult.value,
@@ -40,5 +75,5 @@ export const updateTransaction = async (transactionId, payload, options = {}) =>
   };
 };
 
-export const deleteTransactionById = async (transactionId) =>
-  Transaction.findOneAndDelete({ _id: transactionId });
+export const deleteTransactionById = async (transactionId, userId) =>
+  Transaction.findOneAndDelete({ _id: transactionId,  userId});

@@ -1,14 +1,16 @@
 import express from 'express';
-import pino from 'pino-http';
+// import pino from 'pino-http';
 import cors from 'cors';
-import cookieParser from "cookie-parser";
+import cookieParser from 'cookie-parser';
 import authRouter from './routers/auth.js';
 import TransactionRouter from './routers/transaction.js';
-import {notFoundHandler} from "./middlewares/notFoundHandler.js";
-import {errorHandler} from "./middlewares/errorHandler.js";
+
+import UsersRouter from './routers/users.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import { errorHandler } from './middlewares/errorHandler.js';
 import { getEnvVar } from './utils/getEnvVar.js';
 import { swaggerDocs } from './middlewares/swaggerDocs.js';
-
+import categoriesRouter from './routers/categories.js';
 const PORT = Number(getEnvVar('PORT', '3000'));
 
 export const setupServer = () => {
@@ -17,19 +19,21 @@ export const setupServer = () => {
   app.use(express.json());
   app.use(cors());
   app.use(cookieParser());
-  app.use(
-    pino({
-      transport: {
-        target: 'pino-pretty',
-      },
-    }),
-  );
+  // app.use(
+  //   pino({
+  //     transport: {
+  //       target: 'pino-pretty',
+  //     },
+  //   }),
+  // );
 
-  app.use("/auth", authRouter);
-  app.use("/transactions", TransactionRouter);
+  app.use('/auth', authRouter);
+  app.use('/transactions', TransactionRouter);
+  app.use('/categories', categoriesRouter);
 
-  app.use("/api-docs", swaggerDocs());
- 
+  app.use('/users', UsersRouter);
+
+  app.use('/api-docs', ...swaggerDocs());
 
   app.use(notFoundHandler);
 

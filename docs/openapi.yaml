@@ -1,34 +1,53 @@
 openapi: 3.1.0
 info:
   version: 1.0.0
-  title: Contacts app
+  title: Spendy app
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  description:
-    This is a documentation of my contacts app
+  description: This is a documentation of my spendy app
 tags:
-  - name: Contacts
-    description: Operations related to contact management
+  - name: Auth
+    description: Operations related to user interaction with the application
+  - name: Transactions
+    description: Operations related to transactions management
+  - name: User
+    description: Operations related to the output of user data
+  
 servers:
   - url: http://localhost:3000
-  - url: https://nodejs-hw-mongodb-0u7h.onrender.com
+  - url: https://final-byte-backend.onrender.com
 paths:
-  /contacts:
+  /users/current:
     get: 
-      $ref: "../swagger/paths/contacts/get.yaml"
+     $ref: '../swagger/paths/users/users.yaml'
+  /transactions:
+    get:
+      $ref: '../swagger/paths/transactions/get.yaml'
     post:
-      $ref: "../swagger/paths/contacts/post.yaml"
-      
-  /contacts/{id}:
-    get: 
-      $ref: "../swagger/paths/contacts/{id}/get.yaml"
-    patch: 
-      $ref: "../swagger/paths/contacts/{id}/patch.yaml"
-    delete: 
-      $ref: "../swagger/paths/contacts/{id}/delete.yaml"
+      $ref: '../swagger/paths/transactions/post.yaml'
+  /transactions/{id}:
+    get:
+      $ref: ../swagger/paths/transactions/{id}/get.yaml
+    patch:
+      $ref: ../swagger/paths/transactions/{id}/patch.yaml
+  /transactions/summary/{yearMonth}:
+    get:
+      $ref: ../swagger/paths/transactions/by-date/get.yaml
+  /auth/register:
+    post:
+      $ref: '../swagger/paths/auth/register.yaml'
+  /auth/login:
+    post:
+      $ref: '../swagger/paths/auth/login.yaml'
+  /auth/refresh:
+    post:
+      $ref: '../swagger/paths/auth/refresh.yaml'
+  /auth/logout:
+    post:
+      $ref: '../swagger/paths/auth/logout.yaml'
+  
 components:
+  
   securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
+    $ref: '../swagger/components/schemas/auth/securitySchemes.yaml'

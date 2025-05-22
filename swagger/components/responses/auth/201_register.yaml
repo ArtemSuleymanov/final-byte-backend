@@ -1,4 +1,4 @@
-description: Not found
+description: User registration
 content:
   application/json:
     schema:
@@ -10,15 +10,10 @@ content:
       properties:
         status:
           type: integer
-          example: 404
+          example: 201
         message:
           type: string
-          example: Not found
+          example: Successfully registered a user!
         data:
           type: object
-          required:
-            - message
-          properties:
-            message:
-              type: string
-              example: 'transaction not found'
+          $ref: '../../../components/schemas/auth/authRegisterSchema.yaml'
