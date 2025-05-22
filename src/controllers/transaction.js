@@ -53,7 +53,7 @@ export const createTransactionController = async (req, res, next) => {
 export const updateTransactionController = async (req, res, next) => {
   const { transactionId } = req.params;
   const { _id: userId } = req.user;
-  const resultat = await updateTransaction(transactionId, req.body, userId);
+  const resultat = await updateTransaction(userId, transactionId, req.body);
 
   if (!resultat) {
     throw createHttpError(404, 'Transaction not found');
