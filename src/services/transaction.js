@@ -9,7 +9,7 @@ export const getAllTransactions = async ({page = 1, perPage = 10}) => {
   return {
     data,
     totalItems,
-    ...paginationData,
+    ...paginationData,    
   
   };
 };
@@ -17,7 +17,7 @@ export const getAllTransactions = async ({page = 1, perPage = 10}) => {
 export const createTransaction = async (payload) => {
   const transaction = await Transaction.create(payload);
   return transaction;
-};
+};      
 
 export const updateTransaction = async (transactionId, payload, options = {}) => {
   const rawResult = await Transaction.findOneAndUpdate(

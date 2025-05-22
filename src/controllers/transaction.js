@@ -23,7 +23,6 @@ export const getTransactionsController = async (req, res, next) => {
 };
 
 export const createTransactionController = async (req, res, next) => {
-  try {
     const transaction = await createTransaction(req.body);
 
     res.status(201).json({
@@ -31,13 +30,9 @@ export const createTransactionController = async (req, res, next) => {
       message: 'Successfully created a transaction',
       data: transaction,
     });
-  } catch (error) {
-    next(error);
-  }
 };
 
 export const updateTransactionController = async (req, res, next) => {
-  try {
     const { transactionId } = req.params;
     const resultat = await updateTransaction(transactionId, req.body);
 
@@ -50,9 +45,6 @@ export const updateTransactionController = async (req, res, next) => {
       message: 'Successfully updated a transaction',
       data: resultat.transaction,
     });
-  } catch (error) {
-    next(error);
-  }
 };
 
 export const deleteTransactionController = async (req, res, next) => {

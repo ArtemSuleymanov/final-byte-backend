@@ -18,7 +18,7 @@ TransactionRouter.post(
 
 TransactionRouter.patch(
   '/:transactionId',
-  isValidId,
+  isValidId("transactionId"),
   validateBody(transactionUpdateSchema),
   ctrlWrapper(updateTransactionController)
 );
