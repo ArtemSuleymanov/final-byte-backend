@@ -467,7 +467,8 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "2025-28"
+              "pattern": "^\\d{4}-\\d{2}$",
+              "example": "2025-08"
             }
           }
         ],
