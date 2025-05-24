@@ -319,13 +319,13 @@
       }
     },
     "/transactions/{id}": {
-      "get": {
+      "delete": {
         "tags": [
           "Transactions"
         ],
-        "summary": "Get transaction by id",
-        "operationId": "getTransaction",
-        "description": "Get transaction by id",
+        "summary": "Delete Transaction by id",
+        "operationId": "deleteTransaction",
+        "description": "delete contact by id",
         "security": [
           {
             "bearerAuth": []

@@ -15,7 +15,6 @@ tags:
     description: Operations related to the output of user data
   
 servers:
-  - url: http://localhost:3000
   - url: https://final-byte-backend.onrender.com
 paths:
   /users/current:
@@ -27,13 +26,13 @@ paths:
     post:
       $ref: '../swagger/paths/transactions/post.yaml'
   /transactions/{id}:
-    get:
-      $ref: ../swagger/paths/transactions/{id}/get.yaml
+    delete: 
+      $ref: '../swagger/paths/transactions/{id}/delete.yaml'
     patch:
-      $ref: ../swagger/paths/transactions/{id}/patch.yaml
+      $ref: '../swagger/paths/transactions/{id}/patch.yaml'
   /transactions/summary/{yearMonth}:
     get:
-      $ref: ../swagger/paths/transactions/by-date/get.yaml
+      $ref: '../swagger/paths/transactions/by-date/get.yaml'
   /auth/register:
     post:
       $ref: '../swagger/paths/auth/register.yaml'

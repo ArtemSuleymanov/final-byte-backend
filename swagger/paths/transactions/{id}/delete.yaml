@@ -1,9 +1,9 @@
 # swagger/paths/contacts/{id}/get.yaml
 tags:
   - Transactions
-summary: Get Transaction by id
-operationId: getTransaction
-description: 'Get contact by id'
+summary: Delete Transaction by id
+operationId: deleteTransaction
+description: 'delete contact by id'
 security:
   - bearerAuth: []
 parameters:
