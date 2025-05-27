@@ -1,5 +1,6 @@
 import createHttpError from 'http-errors';
 import mongoose from 'mongoose';
+import User from '../db/models/user.js';
 import {
   getAllTransactions,
   createTransaction,
@@ -37,11 +38,12 @@ export const getTransactionsController = async (req, res, next) => {
 
 export const createTransactionController = async (req, res, next) => {
   const { _id: userId } = req.user;
+  if (!userId) throw createHttpError(401, 'Unauthorized');
 
-  if (!userId) {
-    throw createHttpError(401, 'Unauthorized');
-  }
   const transaction = await createTransaction({ ...req.body, userId });
+  const delta =
+    transaction.type === 'income' ? transaction.amount : -transaction.amount;
+  await User.findByIdAndUpdate(userId, { $inc: { balance: delta } });
 
   res.status(201).json({
     status: 201,
@@ -53,38 +55,48 @@ export const createTransactionController = async (req, res, next) => {
 export const updateTransactionController = async (req, res, next) => {
   const { transactionId } = req.params;
   const { _id: userId } = req.user;
-  const resultat = await updateTransaction(userId, transactionId, req.body);
 
-  if (!resultat) {
-    throw createHttpError(404, 'Transaction not found');
-  }
+  const oldTransaction = await Transaction.findOne({
+    _id: transactionId,
+    userId,
+  });
+  if (!oldTransaction) throw createHttpError(404, 'Transaction not found');
+
+  const updatedTransaction = await updateTransaction(
+    userId,
+    transactionId,
+    req.body,
+  );
+  if (!updatedTransaction) throw createHttpError(404, 'Transaction not found');
+  const oldDelta =
+    oldTransaction.type === 'income'
+      ? oldTransaction.amount
+      : -oldTransaction.amount;
+  const newDelta =
+    req.body.type === 'income' ? req.body.amount : -req.body.amount;
+  const delta = newDelta - oldDelta;
+
+  await User.findByIdAndUpdate(userId, { $inc: { balance: delta } });
 
   res.json({
     status: 200,
     message: 'Successfully updated a transaction',
-    data: resultat.transaction,
+    data: updatedTransaction.transaction,
   });
 };
 
 export const deleteTransactionController = async (req, res, next) => {
   const { transactionId } = req.params;
   const { _id: userId } = req.user;
-  const data = await deleteTransactionById(transactionId, userId);
 
-  if (!data) {
-    throw createHttpError(
-      404,
-      `Transaction with ID ${transactionId} not found`,
-    );
-  }
-
-
-
+  const transaction = await deleteTransactionById(transactionId, userId);
+  if (!transaction) throw createHttpError(404, `Transaction not found`);
+  const delta =
+    transaction.type === 'income' ? -transaction.amount : transaction.amount;
+  await User.findByIdAndUpdate(userId, { $inc: { balance: delta } });
 
   res.status(204).end();
-
 };
-
 
 export const getMonthlySummaryController = async (req, res, next) => {
   const { yearMonth } = req.params;
