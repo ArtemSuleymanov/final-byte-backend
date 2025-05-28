@@ -153,7 +153,7 @@ export const getMonthlySummaryController = async (req, res, next) => {
     } else if (type === 'expense') {
       totalExpense += t.totalAmount;
     }
-  }
+  }    
 
   res.json({
     categorySummary,

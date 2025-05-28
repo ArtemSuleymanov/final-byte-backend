@@ -20,7 +20,10 @@ parameters:
     name: sortBy
     schema:
       type: string
-      example: 'amount'
+      enum:
+        - amount
+        - date
+      example: 'amount, date,'
     description: "All transactions fields can be mentioned. Default value - _id"
   - in: query
     name: sortOrder
@@ -70,7 +73,7 @@ parameters:
   
 responses:
   '200':
-    $ref: '../../components/responses/200.yaml'
+    $ref: ../../components/responses/200Get.yaml
   '401':
     $ref: '../../components/responses/401.yaml'
   '404':

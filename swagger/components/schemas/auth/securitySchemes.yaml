@@ -1,7 +1,3 @@
-cookieAuth:
-  type: apiKey
-  in: cookie
-  name: sessionId
 bearerAuth:
   type: http
   scheme: bearer

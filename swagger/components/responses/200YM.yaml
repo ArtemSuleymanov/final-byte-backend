@@ -1,0 +1,26 @@
+description: Successfully found transaction summary
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - categorySummary
+        - totals
+      properties:
+        categorySummary:
+          type: object
+          additionalProperties:
+            type: number
+          example: {}
+        totals:
+          type: object
+          required:
+            - income
+            - expense
+          properties:
+            income:
+              type: number
+              example: 0
+            expense:
+              type: number
+              example: 0
