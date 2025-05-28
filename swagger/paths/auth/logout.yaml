@@ -3,6 +3,8 @@ tags:
 summary: Logout user
 operationId: logoutUser
 description: Logs out the user by clearing session and refresh tokens
+security:
+  - bearerAuth: []
 responses:
   '204':
     description: Successfully logged out, no content
