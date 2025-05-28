@@ -1,0 +1,38 @@
+description: Successfully found transactions
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Successfully found transactions
+        data:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+              example: []
+            totalItems:
+              type: integer
+              example: 0
+            page:
+              type: integer
+              example: 1
+            perPage:
+              type: integer
+              example: 10
+            totalPages:
+              type: integer
+              example: 0
+            hasPrevPage:
+              type: boolean
+              example: false
+            hasNextPage:
+              type: boolean
+              example: false

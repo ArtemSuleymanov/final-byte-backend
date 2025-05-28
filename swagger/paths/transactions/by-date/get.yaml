@@ -16,7 +16,7 @@ parameters:
       example: '2025-08'
 responses:
   '200':
-    $ref: '../../../components/responses/200.yaml'
+    $ref: ../../../components/responses/200YM.yaml
   '401':
     $ref: '../../../components/responses/401.yaml'
   '404':

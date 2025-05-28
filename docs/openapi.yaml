@@ -22,7 +22,7 @@ paths:
      $ref: '../swagger/paths/users/users.yaml'
   /transactions:
     get:
-      $ref: '../swagger/paths/transactions/get.yaml'
+     $ref: '../swagger/paths/transactions/get.yaml'
     post:
       $ref: '../swagger/paths/transactions/post.yaml'
   /transactions/{id}:

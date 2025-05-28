@@ -46,10 +46,6 @@ requestBody:
             type: string
             format: date
             example: "2025-10-08"
-          userId:
-            description: "User ID (will be added automatically on backend)"
-            type: string
-            example: "65e4decdd286b30065d54af9"
           comment:
             description: "Transaction comment"
             type: string

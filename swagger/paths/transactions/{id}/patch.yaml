@@ -1,7 +1,7 @@
 tags:
   - Transactions
 summary: Update transaction
-operationId: updateTransactionby
+operationId: updateTransactionById
 description: 'Update a transaction with payload'
 security:
   - bearerAuth: []
@@ -10,6 +10,14 @@ parameters:
     name: id
     required: true
     schema:
+      type: string
+    description: ID of the transaction to update
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
         type: object
         required:
           - type
@@ -18,43 +26,43 @@ parameters:
           - date
         properties:
           type:
-            description: "type of transaction"
+            description: "Type of transaction"
             type: string
             enum: ['income', 'expense']
           category:
-            description: "category of transaction"
+            description: "Category of transaction"
             type: string
-            enum: [
-              'Incomes',
-              'Main expenses',
-              'Products',
-              'Car',
-              'Self care',
-              'Child care',
-              'Household products',
-              'Education',
-              'Leisure',
-              'Other expenses',
-              'Entertainment',
-            ]
+            enum:
+              - Incomes
+              - Main expenses
+              - Products
+              - Car
+              - Self care
+              - Child care
+              - Household products
+              - Education
+              - Leisure
+              - Other expenses
+              - Entertainment
             example: "Car"
           amount:
-            description: "trunsaction amount"
+            description: "Transaction amount"
             type: number
             example: 2000
           date:
-            description: "operation date"
+            description: "Operation date"
             type: string
             format: date
             example: "2025-10-08"
           userId:
-            description: "Contact's user id"
+            description: "Contact's user ID"
             type: string
-            example: 65e4decdd286b30065d54af9
+            example: "65e4decdd286b30065d54af9"
           comment:
-            description: "trunsaction acomment"
+            description: "Transaction comment"
             type: string
             example: "for fix car"
+
 responses:
   '200':
     $ref: '../../../components/responses/200.yaml'

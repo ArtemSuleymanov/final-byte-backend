@@ -7,7 +7,7 @@ description: 'Get transaction by id'
 security:
   - bearerAuth: []
 parameters:
-  - in: path
+  - in: query
     name: id
     required: true
     schema:
