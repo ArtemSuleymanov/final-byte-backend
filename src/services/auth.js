@@ -3,13 +3,13 @@ import { randomBytes } from 'crypto';
 import User from "../db/models/user.js";
 import bcrypt from "bcrypt";
 import { SessionsCollection } from "../db/models/session.js";
-import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
+import { SIXTEEN_HOURS, THIRTY_DAYS } from '../constants/index.js';
 const SALT_ROUNDS = 10;
 
 const createSession = () => {
   const accessToken = randomBytes(30).toString('base64');
   const refreshToken = randomBytes(30).toString('base64');
-  const accessTokenValidUntil = new Date(Date.now() + FIFTEEN_MINUTES);
+  const accessTokenValidUntil = new Date(Date.now() + SIXTEEN_HOURS);
   const refreshTokenValidUntil = new Date(Date.now() + THIRTY_DAYS);
 
   return {
